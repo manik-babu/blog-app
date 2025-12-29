@@ -2,7 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import { toNodeHandler } from "better-auth/node";
 import { auth as betterAuth } from './lib/auth';
 import cors from 'cors';
-import auth from './middleware/auth';
+import auth, { UserRole } from './middleware/auth';
 
 const app: Application = express();
 
@@ -16,7 +16,7 @@ app.use(express.urlencoded());
 app.all('/api/auth/*splat', toNodeHandler(betterAuth));
 
 
-app.get('/', auth("USER"), async (req: Request, res: Response) => {
+app.get('/', auth(UserRole.USER), async (req: Request, res: Response) => {
     res.json({
         message: "Hello world"
     });
