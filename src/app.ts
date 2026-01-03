@@ -3,6 +3,7 @@ import { toNodeHandler } from "better-auth/node";
 import { auth as betterAuth } from './lib/auth';
 import cors from 'cors';
 import auth, { UserRole } from './middleware/auth';
+import { postRoute } from './modules/post/post.routes';
 
 const app: Application = express();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded());
 
 // better auth
 app.all('/api/auth/*splat', toNodeHandler(betterAuth));
+app.use('/api/post', postRoute);
 
 
 app.get('/', async (req: Request, res: Response) => {
