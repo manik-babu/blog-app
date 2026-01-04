@@ -61,9 +61,7 @@ const getPostById = async (req: Request, res: Response) => {
 
 const deletePost = async (req: Request, res: Response) => {
     try {
-        // 
-        // 
-        // 
+        //! Update in futere
     } catch (error: any) {
         console.error('Server error: ', error.message);
         res.status(500).json({
