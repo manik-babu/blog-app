@@ -8,7 +8,7 @@ const router = Router();
 router.post('/', auth(UserRole.ADMIN, UserRole.USER), postController.createPost);
 router.get('/', postController.getPost);
 router.get('/:userId', postController.getPostById);
-// router.delete('/:postId', auth(UserRole.USER, UserRole.ADMIN), )
+router.delete('/:postId', auth(UserRole.USER, UserRole.ADMIN), postController.deletePost)
 
 
 export const postRoute = router;

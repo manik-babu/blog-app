@@ -1,5 +1,6 @@
 import { Post } from "../../../generated/prisma/client"
 import { prisma } from "../../lib/prisma"
+import { UserRole } from "../../middleware/auth";
 
 const createPost = async (payload: Pick<Post, "caption" | "status" | "attachment">, userId: string) => {
     const createdPost = await prisma.post.create({
@@ -57,12 +58,27 @@ const getPostById = async (userId: string, status: 'PUBLIC' | 'PRIVATE' | 'ALL')
     });
     return data;
 }
-const deletePost = async (postId: string) => {
+const deletePost = async (postId: string, user: any) => {
+    const post = await prisma.post.findUnique({
+        where: {
+            id: postId
+        }
+    });
+    if (!post) {
+        return null;
+    }
+
+    if (post.id != user.id && user.role == UserRole.USER) {
+        return undefined;
+    }
     const result = await prisma.post.delete({
         where: {
             id: postId
         }
-    })
+    });
+
+
+    return result;
 }
 const postService = {
     createPost,

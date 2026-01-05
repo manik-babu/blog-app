@@ -61,7 +61,28 @@ const getPostById = async (req: Request, res: Response) => {
 
 const deletePost = async (req: Request, res: Response) => {
     try {
-        //! Update in futere
+        const data = await postService.deletePost(req.params.postId!, req.user);
+
+        if (data === null) {
+            return res.status(404).json({
+                success: false,
+                message: "Post delation failed",
+                error: "Post not found!"
+            });
+        }
+        if (data == undefined) {
+            return res.status(403).json({
+                success: false,
+                message: "Post delation failed",
+                error: "You are not permited"
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Post deleted successfully",
+            data: data
+        });
     } catch (error: any) {
         console.error('Server error: ', error.message);
         res.status(500).json({
@@ -76,6 +97,7 @@ const postController = {
     createPost,
     getPost,
     getPostById,
+    deletePost,
 }
 
 export default postController;
