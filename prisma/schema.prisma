@@ -21,16 +21,34 @@ model Post {
   author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   status     PostStatus
   comments   Comment[]
+  likes      Like[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
   @@index([authorId])
+  @@map("posts")
+}
+
+enum PostStatus {
+  PRIVATE
+  PUBLIC
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@map("likes")
 }
 
 model Comment {
   id        String    @id @default(uuid())
   content   String
-  authorId  String //? handle with better auth
+  authorId  String
   author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   postId    String
   post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
@@ -43,11 +61,7 @@ model Comment {
   @@index([postId])
   @@index([parentId])
   @@index([authorId])
-}
-
-enum PostStatus {
-  PRIVATE
-  PUBLIC
+  @@map("comments")
 }
 
 model User {
@@ -62,6 +76,7 @@ model User {
   accounts      Account[]
   posts         Post[]
   comments      Comment[]
+  likes         Like[]
   role          String?   @default("USER")
 
   @@unique([email])

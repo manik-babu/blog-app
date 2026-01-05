@@ -29,6 +29,16 @@ const getPost = async (searchText: string) => {
                 }
             ]
         },
+        include: {
+            author: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    image: true
+                }
+            }
+        },
         orderBy: {
             createdAt: 'desc'
         }
