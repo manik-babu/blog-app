@@ -38,8 +38,15 @@ const getPost = async (searchText: string) => {
                     email: true,
                     image: true
                 }
+            },
+            _count: {
+                select: {
+                    likes: true,
+                    comments: true,
+                }
             }
         },
+
         orderBy: {
             createdAt: 'desc'
         }

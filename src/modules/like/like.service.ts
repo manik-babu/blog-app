@@ -1,27 +1,45 @@
 import { prisma } from "../../lib/prisma"
 
 
-const addLike = async (postId: string, userId: string) => {
+const like = async (postId: string, userId: string) => {
     const post = await prisma.post.findUnique({
         where: {
             id: postId
+        },
+        select: {
+            id: true
         }
     });
 
     if (!post) {
         return null;
     }
-
-    return await prisma.like.create({
-        data: {
-            postId,
-            authorId: userId
+    try {
+        await prisma.like.delete({
+            where: {
+                likeId: {
+                    postId,
+                    authorId: userId
+                }
+            }
+        });
+        return {
+            message: "Unliked"
         }
-    })
-
+    } catch (error) {
+        await prisma.like.create({
+            data: {
+                postId,
+                authorId: userId
+            }
+        });
+        return {
+            message: "liked"
+        }
+    }
 }
 
 const likeService = {
-    addLike,
+    like,
 }
 export default likeService;

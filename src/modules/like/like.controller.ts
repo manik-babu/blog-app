@@ -2,13 +2,19 @@ import { Request, Response } from "express";
 import likeService from "./like.service";
 
 
-const addLike = async (req: Request, res: Response) => {
+const like = async (req: Request, res: Response) => {
     try {
-        const result = await likeService.addLike(req.params.postId!, req.user?.id!);
+        const result = await likeService.like(req.params.postId!, req.user?.id!);
 
-        res.status(201).json({
-            message: "Liked"
-        });
+        if (result === null) {
+            return res.status(404).json({
+                success: false,
+                message: "Can't like",
+                error: "Post does not exist"
+            })
+        }
+
+        res.status(200).json(result);
     } catch (error: any) {
         console.error('Server error: ', error.message);
         res.status(500).json({
@@ -20,6 +26,6 @@ const addLike = async (req: Request, res: Response) => {
 }
 
 const likeController = {
-    addLike,
+    like,
 }
 export default likeController;

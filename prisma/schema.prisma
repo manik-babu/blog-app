@@ -35,13 +35,13 @@ enum PostStatus {
 }
 
 model Like {
-  id        String   @id @default(uuid())
   postId    String
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   authorId  String
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
+  @@id(name: "likeId", [postId, authorId])
   @@map("likes")
 }
 

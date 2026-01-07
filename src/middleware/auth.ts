@@ -31,7 +31,6 @@ const auth = (...roles: UserRole[]) => {
                 role: session.user.role as string,
                 emailVerified: session.user.emailVerified
             }
-            console.log(req.user);
 
             next();
         } catch (error: any) {
