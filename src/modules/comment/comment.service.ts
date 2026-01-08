@@ -35,7 +35,6 @@ const addComment = async (payload: { content: string, postId: string, parentId?:
         }
     })
 }
-
 const getPostComment = async (postId: string) => {
     const result = await prisma.post.findUnique({
         where: {
@@ -64,7 +63,6 @@ const getPostComment = async (postId: string) => {
 
     return result.comments;
 }
-
 const getCommentReplies = async (commentId: string) => {
     const result = await prisma.comment.findUnique({
         where: {
