@@ -7,6 +7,7 @@ const router = Router();
 
 router.post('/', auth(UserRole.ADMIN, UserRole.USER), commentController.addComment);
 router.get('/:postId', commentController.getPostComment);
+router.get('/replies/:commentId', commentController.getCommentReplies);
 
 
 export const commentRoute = router;

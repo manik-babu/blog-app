@@ -53,10 +53,34 @@ const getPostComment = async (req: Request, res: Response) => {
         });
     }
 }
+const getCommentReplies = async (req: Request, res: Response) => {
+    try {
+        const result = await commentService.getPostComment(req.params.commentId!);
+
+        if (!result) {
+            return res.status(404).json({
+                message: "Comment not found"
+            });
+        }
+        res.status(200).json({
+            message: "Replies retrived successfully",
+            data: result
+        });
+    } catch (error: any) {
+        console.error('Server error: ', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error!',
+            errors: error.message
+        });
+    }
+}
+
 
 const commentController = {
     addComment,
     getPostComment,
+    getCommentReplies,
 }
 export default commentController;
 
