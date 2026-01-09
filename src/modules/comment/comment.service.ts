@@ -13,7 +13,7 @@ const addComment = async (payload: { content: string, postId: string, parentId?:
     });
 
     if (!post) {
-        throw new CustomError.NotFoundError("Post not found");
+        throw new CustomError.NotFoundError("Unable to post your comment. The post might no longer exist.");
     }
     if (payload.parentId) {
         const parentComment = await prisma.comment.findUnique({
@@ -25,7 +25,7 @@ const addComment = async (payload: { content: string, postId: string, parentId?:
             }
         });
         if (!parentComment) {
-            return undefined;
+            throw new CustomError.NotFoundError("Unable to post your reply. The comment might no longer exist.")
         }
     }
 
@@ -59,7 +59,7 @@ const getPostComment = async (postId: string) => {
     });
 
     if (!result) {
-        return null;
+        throw new CustomError.NotFoundError("Can't retrived comments! The post might no longer exist.");
     }
 
     return result.comments;
@@ -84,7 +84,7 @@ const getCommentReplies = async (commentId: string) => {
     });
 
     if (!result) {
-        return null;
+        throw new CustomError.NotFoundError("Can't retrived replies! The comment might no longer exist.");
     }
 
     return result.replies;
@@ -95,7 +95,6 @@ const commentService = {
     addComment,
     getPostComment,
     getCommentReplies,
-
 }
 
 export default commentService;

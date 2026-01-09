@@ -2,10 +2,10 @@ import express, { Application, Request, Response } from 'express';
 import { toNodeHandler } from "better-auth/node";
 import { auth as betterAuth } from './lib/auth';
 import cors from 'cors';
-import auth, { UserRole } from './middleware/auth';
 import { postRoute } from './modules/post/post.routes';
 import { likeRoute } from './modules/like/like.routes';
 import { commentRoute } from './modules/comment/comment.routes';
+import globalErrorHandler from './middleware/errorHandler';
 
 const app: Application = express();
 
@@ -28,6 +28,7 @@ app.get('/', async (req: Request, res: Response) => {
         message: "Hello world"
     });
 })
+app.use(globalErrorHandler);
 
 
 export default app;
