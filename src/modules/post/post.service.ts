@@ -1,4 +1,5 @@
 import { Post } from "../../../generated/prisma/client"
+import CustomError from "../../helper/customError";
 import { prisma } from "../../lib/prisma"
 import { UserRole } from "../../middleware/auth";
 
@@ -72,12 +73,11 @@ const deletePost = async (postId: string, user: any) => {
         }
     });
     if (!post) {
-        return null;
+        throw new CustomError.NotFoundError("Unable to delete your post! The post might no longer exist.");
     }
 
     if (post.authorId != user.id && user.role == UserRole.USER) {
-        console.log(post.id, user.id, user.role)
-        return undefined;
+        throw new CustomError.PermissionError("Unable to delete the post! Permission denied");
     }
     const result = await prisma.post.delete({
         where: {
@@ -96,11 +96,11 @@ const updatePost = async (postId: string, payload: { caption?: string, attachmen
         }
     });
     if (!post) {
-        return null;
+        throw new CustomError.NotFoundError("Unable to update your post! The post might no longer exist.");
     }
 
-    if (post.authorId != user.id && user.role == UserRole.USER) {
-        return undefined;
+    if (post.authorId != user.id) {
+        throw new CustomError.PermissionError("Unable to delete the post! Permission denied");
     }
     const updatedPost = await prisma.post.update({
         where: {
