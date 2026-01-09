@@ -11,7 +11,7 @@ const globalErrorHandler = (error: any, req: Request, res: Response, next: NextF
     }
     else if (error instanceof CustomError.PermissionError) {
         statusCode = 403;
-        statusMessage: error.message;
+        statusMessage = error.message;
     }
 
 

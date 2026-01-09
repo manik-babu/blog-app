@@ -1,3 +1,4 @@
+import CustomError from "../../helper/customError";
 import { prisma } from "../../lib/prisma"
 
 
@@ -12,7 +13,7 @@ const like = async (postId: string, userId: string) => {
     });
 
     if (!post) {
-        return null;
+        throw new CustomError.NotFoundError("Can't like the post! Post might no longer exist.");
     }
     try {
         await prisma.like.delete({
