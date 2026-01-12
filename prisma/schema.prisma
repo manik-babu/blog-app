@@ -64,20 +64,40 @@ model Comment {
   @@map("comments")
 }
 
+model Friendship {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation("friendshipsInitiated", fields: [userId], references: [id], onDelete: Cascade)
+  friendId  String
+  friend    User             @relation("friendshipsReceived", fields: [friendId], references: [id], onDelete: Cascade)
+  status    FriendshipStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@unique([userId, friendId])
+}
+
+enum FriendshipStatus {
+  PENDING
+  FRIEND
+}
+
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  posts         Post[]
-  comments      Comment[]
-  likes         Like[]
-  role          String?   @default("USER")
+  id                   String       @id
+  name                 String
+  email                String
+  emailVerified        Boolean      @default(false)
+  image                String?
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  sessions             Session[]
+  accounts             Account[]
+  posts                Post[]
+  comments             Comment[]
+  likes                Like[]
+  role                 String?      @default("USER")
+  friendshipsInitiated Friendship[] @relation("friendshipsInitiated")
+  friendshipsReceived  Friendship[] @relation("friendshipsReceived")
 
   @@unique([email])
   @@map("user")
