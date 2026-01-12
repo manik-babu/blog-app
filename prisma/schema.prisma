@@ -75,6 +75,9 @@ model Friendship {
   updatedAt DateTime         @updatedAt
 
   @@unique([userId, friendId])
+  @@index([userId])
+  @@index([friendId])
+  @@map("friendships")
 }
 
 enum FriendshipStatus {
