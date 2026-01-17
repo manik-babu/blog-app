@@ -5,8 +5,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // Use true for port 465, false for port 587
   auth: {
-    user: "rsmanik99@gmail.com",
-    pass: "kxrznxzvwzwpuibi",
+    user: process.env.APP_USER, // "rsmanik99@gmail.com",
+    pass: process.env.APP_PASS  // "kxrznxzvwzwpuibi",
   },
 });
 
@@ -14,9 +14,9 @@ const sendMail = async (user: any, url: string, token: string) => {
   const verificationLink = `${process.env.FRONTEND_URL}?token=${token}`;
 
   const info = await transporter.sendMail({
-    from: '"Bloggie" <blog@blog.com>',
+    from: '"Circle" <circle@circle.com>',
     to: user.email,
-    subject: "Verify your email - Bloggie",
+    subject: "Verify your email - Circle",
     html: `
 <!DOCTYPE html>
 <html>
@@ -32,7 +32,7 @@ const sendMail = async (user: any, url: string, token: string) => {
           <!-- Header -->
           <tr>
             <td style="padding:30px;text-align:center;background:#4f46e5;color:white;border-radius:10px 10px 0 0;">
-              <h1 style="margin:0;">Bloggie</h1>
+              <h1 style="margin:0;">Circle</h1>
               <p style="margin:5px 0 0;">Email Verification</p>
             </td>
           </tr>
@@ -42,7 +42,7 @@ const sendMail = async (user: any, url: string, token: string) => {
             <td style="padding:40px;">
               <h2 style="color:#111827;">Hello ${user.name || "User"} 👋</h2>
               <p style="color:#4b5563;font-size:16px;line-height:1.6;">
-                Thank you for creating an account on <strong>Bloggie</strong>.  
+                Thank you for creating an account on <strong>Circle</strong>.  
                 Please confirm your email address by clicking the button below.
               </p>
 
@@ -70,7 +70,7 @@ const sendMail = async (user: any, url: string, token: string) => {
           <!-- Footer -->
           <tr>
             <td style="padding:20px;text-align:center;background:#f9fafb;border-radius:0 0 10px 10px;color:#9ca3af;font-size:12px;">
-              © ${new Date().getFullYear()} Bloggie. All rights reserved.
+              © ${new Date().getFullYear()} Circle. All rights reserved.
             </td>
           </tr>
 
